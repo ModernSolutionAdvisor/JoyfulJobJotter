@@ -5,6 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
+		"build:svelte": "vite build", 
+		"build:chrome": "tsc -p tsconfig.chrome.json", 
 		"build": "bun run build:svelte && bun run build:chrome && node copy-manifest.js",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
