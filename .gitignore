@@ -1,10 +1,36 @@
+node_modules
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Paraglide
+src/lib/paraglide
+
 # Local
 .DS_Store
 *.local
 *.log*
 
 # Dist
-node_modules
 dist/
 
 # IDE
@@ -32,19 +58,3 @@ Sessionx.vim
 tags
 # Persistent undo
 [._]*.un~
-
-### Vue ###
-# gitignore template for Vue.js projects
-#
-# Recommended template: Node.gitignore
-
-# TODO: where does this rule come from?
-docs/_book
-
-# TODO: where does this rule come from?
-test/
-
-
-## Panda
-styled-system
-styled-system-studio
