@@ -1,0 +1,17 @@
+// tsconfig.chrome.json
+{
+    "compilerOptions": {
+      "target": "ES2020", // Target modern JS for service workers
+      "module": "ES2020", // Use ES Modules if specified in manifest
+      "outDir": "build",  // Output directly to the build folder
+      "rootDir": "src/lib", // Or wherever your chrome scripts are
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "moduleResolution": "node", // Or "Bundler" if using newer Node/TS versions
+      "types": ["chrome"] // Include chrome types
+    },
+    "include": ["src/lib/background.ts", "src/lib/content.ts"], // Specify files to compile
+    "exclude": ["node_modules"]
+  }
