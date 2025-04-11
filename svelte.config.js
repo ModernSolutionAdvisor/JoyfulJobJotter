@@ -26,10 +26,11 @@ const config = {
             entries: [
                 // Example: Assuming you have src/routes/popup/+page.svelte
                 '/popup',
+                '/'
                 // Example: Assuming you have src/routes/options/+page.svelte
-                '/options',
+                // '/options',
 				// Example: Assuming you have src/routes/journal/+page.svelte
-				'/journal',
+				// '/journal',
                 // Add any other distinct HTML pages your extension needs
                 //'*' // Can sometimes work, but explicit is better. Be careful with dynamic routes.
             ]

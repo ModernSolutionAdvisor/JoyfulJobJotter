@@ -1,6 +1,7 @@
 // src/content.ts
 
 // --- Interfaces (assuming these are defined or imported) ---
+// @TODO Add country and state to the JobData interface
 interface JobData {
 	companyName?: string;
 	jobPosition?: string;
