@@ -7,64 +7,85 @@
 
     function addToJournal() {
         if (companyName && jobPosition) {
-            const jobEntry = { companyName, jobPosition, dateAdded: new Date().toISOString() };
-            const existingEntries = JSON.parse(localStorage.getItem('jobJournal') || '[]');
-            existingEntries.push(jobEntry);
-            localStorage.setItem('jobJournal', JSON.stringify(existingEntries));
-            resetForm();
-            showPopup = false;
-            alert('Job added to the journal!');
+            const jobEntry = { 
+                companyName, 
+                jobPosition, 
+                dateAdded: new Date().toISOString() 
+            };
+            
+            chrome.storage.local.get(['jobJournal'], (result) => {
+                const existingEntries = result.jobJournal || [];
+                existingEntries.push(jobEntry);
+                chrome.storage.local.set({ jobJournal: existingEntries }, () => {
+                    resetForm();
+                    showPopup = false;
+                    alert('Job added to the journal!');
+                });
+            });
         } else {
             alert('Please fill out all fields.');
         }
     }
-
+    function closePopup() {
+        showPopup = false;
+    }
+    function openPopup() {
+        showPopup = true;
+    }
     function resetForm() {
         companyName = '';
         jobPosition = '';
     }
 
     onMount(() => {
-        // Optional: Initialize local storage if not already set
-        if (!localStorage.getItem('jobJournal')) {
-            localStorage.setItem('jobJournal', JSON.stringify([]));
-        }
+        // Initialize storage if needed
+        chrome.storage.local.get(['jobJournal'], (result) => {
+            if (!result.jobJournal) {
+                chrome.storage.local.set({ jobJournal: [] });
+            }
+        });
     });
 </script>
 
 {#if showPopup}
-    <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-5 rounded-lg shadow-lg z-50">
+    <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-5 rounded-lg shadow-lg z-50 w-96">
         <h2 class="text-xl font-semibold mb-4">Add Job to Journal</h2>
-        <form on:submit|preventDefault={addToJournal}>
-            <label class="block mb-2">
-                <span class="block text-sm font-medium">Company Name:</span>
-                <input 
-                    type="text" 
-                    bind:value={companyName} 
-                    placeholder="Enter company name" 
-                    class="w-full p-2 mt-1 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-            </label>
-            <label class="block mb-2">
-                <span class="block text-sm font-medium">Job Position:</span>
-                <input 
-                    type="text" 
-                    bind:value={jobPosition} 
-                    placeholder="Enter job position" 
-                    class="w-full p-2 mt-1 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-            </label>
+        <form on:submit|preventDefault={addToJournal} class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">
+                    Company Name:
+                    <input 
+                        type="text" 
+                        bind:value={companyName} 
+                        placeholder="Enter company name" 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    />
+                </label>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700">
+                    Job Position:
+                    <input 
+                        type="text" 
+                        bind:value={jobPosition} 
+                        placeholder="Enter job position" 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    />
+                </label>
+            </div>
+
             <div class="flex space-x-3">
                 <button 
                     type="submit" 
-                    class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400"
+                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 >
                     Add to Journal
                 </button>
                 <button 
                     type="button" 
-                    on:click={() => (showPopup = false)} 
-                    class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+                    on:click={closePopup} 
+                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                 >
                     Cancel
                 </button>
@@ -72,8 +93,3 @@
         </form>
     </div>
 {/if}
-
-<style lang="postcss">
-    @reference "tailwindcss";
-
-</style>
