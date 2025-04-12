@@ -10,15 +10,23 @@ const config = {
 
     kit: {
         // Use adapter-static
+
+		appDir: 'internal',
         adapter: adapter({
             // Default options:
             pages: 'build', // Output directory for the static files
             assets: 'build', // Output directory for assets (relative to pages)
-            fallback: undefined, // Important for extensions: usually no fallback needed unless you build a complex SPA-like options page
+            fallback: null, // Important for extensions: usually no fallback needed unless you build a complex SPA-like options page
             precompress: false, // Compression not typically needed for extensions
             strict: true // Recommended to catch potential issues
         }),
+		// alias: {
+		// 	// Define your aliases here instead of in tsconfig.json
+		// 	'$lib': './src/lib',
+		// 	'async_hooks': './src/lib/mocks/async-hooks'
+		//   }
 
+		// ,
         // IMPORTANT: Define paths for your extension pages
         // This tells SvelteKit which pages to pre-render into HTML files.
         // Add routes for your popup, options page, etc.
@@ -35,7 +43,16 @@ const config = {
                 //'*' // Can sometimes work, but explicit is better. Be careful with dynamic routes.
             ]
         },
-
+		csrf: {
+			checkOrigin: false,
+		  },
+		  csp: {
+			mode: 'hash',
+			directives: {
+			  'script-src': ['self', 'unsafe-inline', 'http://localhost:*', 'http://127.0.0.1:*'],
+			  'style-src': ['self', 'unsafe-inline'],
+			}
+		}
         // Optional: If your extension assets need a specific base path (usually not needed for simple extensions)
         // paths: {
         //     base: '' // Default is usually fine
